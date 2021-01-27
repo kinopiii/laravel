@@ -46,6 +46,10 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+        'users' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
     ],
 
     /*
@@ -68,7 +72,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\User::class,
+            'model' => App\Member::class,
         ],
 
         // 'users' => [
@@ -113,5 +117,5 @@ return [
     */
 
     'password_timeout' => 10800,
-
+    'model' => App\Member::class,
 ];
