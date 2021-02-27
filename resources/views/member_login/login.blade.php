@@ -31,6 +31,7 @@
                 padding:10px 70px;
                 border-color: #FF9900;
                 border-radius: 5px;
+                text-decoration: none;
             }
             .forgetpw{
                 text-decoration: none;
@@ -54,22 +55,22 @@
 
 <form method="post" action="{{ route('login.post') }}">
     @csrf
-    メールアドレス(ID)&emsp;<input type=text name="email" style="width:300px;"><br><br>
+    メールアドレス(ID)&emsp;<input type=text name="email" style="width:300px;" value="{{ old('email') }}"><br><br><br>
     パスワード&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;<input type=password name="password" style="width:300px;"><br><br><br>
 
 
     <a href="{{ action('member_loginController@getresetpw_send') }}" class="forgetpw">パスワードを忘れた方はこちら</a><br><br>
 
+   @if(session()->has('message'))
+   <span class ="error">{{ session()->get('message') }}</span><br><br>
+   @endif
 
-    @isset($message)
-    <span class ="error">{{$message}}</span><br><br>
-    @endisset
 
     <input type="submit" class="orange-button" value="ログイン"><br><br>
-    <input type="submit" class="white-button" name="back" value="トップに戻る">
 
 </form>
 
+<a href="/top" class="white-button">トップに戻る</a><br><br>
 
 </div>
 </body>

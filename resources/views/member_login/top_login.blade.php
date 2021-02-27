@@ -52,8 +52,14 @@
 
 <body>
     <div class="header">
-        <li><a href="{{ action('member_registerController@getmember_register') }}">新規会員登録</a></li>
-        <li><a href="{{ action('member_loginController@getlogin') }}">ログイン</a></li>
+        <div class="header-left">
+        ようこそ&ensp;{{Auth::user()->name_sei}}&ensp;{{Auth::user()->name_mei}}様
+        </div>
+        <ul>
+          <li><a class="forgetpw" href="{{ route('top.post') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">ログアウト</a></li><br><br>
+          <form id="logout-form" action="{{ route('top.post') }}" method="POST" style="display: none;">
+          @csrf
+        </ul>
     </div>
 
 </body>

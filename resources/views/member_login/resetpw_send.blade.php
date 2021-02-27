@@ -40,6 +40,10 @@
                 border-radius: 5px;
                 text-decoration: none;
             }
+            .error{
+                color:red;
+            }
+
         </style>
     </head>
 
@@ -56,7 +60,10 @@
 
     <form method="post" action="{{ route('resetpw_send.post') }}">
         @csrf
-        メールアドレス&emsp;<input type=text name="email" style="width:300px;"><br><br><br><br>
+        メールアドレス&emsp;<input type=text name="email" style="width:300px;" value="{{ old('email') }}"><br><br><br><br>
+        @error('email')
+            <span class ="error">{{$message}}</span><br><br>
+        @enderror
         <input type="submit" class="orange-button" value="送信する"><br><br><br>
     </form>
 

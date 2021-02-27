@@ -5,11 +5,13 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Notifications\ResetPassword; 
 
 class User extends Authenticatable
 {
     use Notifiable;
     protected $table = 'members';
+    Auth::login($user, true);
 
     /**
      * The attributes that are mass assignable.
@@ -44,5 +46,6 @@ class User extends Authenticatable
         $this->notify(new ResetPassword($token));
     }
 
-
 }
+
+

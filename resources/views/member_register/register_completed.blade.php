@@ -18,6 +18,19 @@
             .complete{
                 font-size:21px;
             }
+            .orange-button{
+                background-color:#FF9900;
+                color:white;
+                font-size:18px;
+                font-weight:bold;
+                padding:10px 50px;
+                border-style: none;
+                border-radius: 5px;
+                text-decoration: none;            
+            }
+
+
+
         </style>
     </head>
     <body>
@@ -29,6 +42,8 @@
         <p class="complete">
         会員登録が完了しました。
         </p>
+
+            <br><br><br><br><a href="/top" class="orange-button">トップに戻る</a>
 
     </div>
     </body>

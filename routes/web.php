@@ -32,47 +32,32 @@ Route::post('/register_completed', 'member_registerController@completed')->name(
 
 
 
-
-//TOPページへ遷移
-Route::get('/top', 'member_loginController@gettop')->name("top.show");
-//ログインした際のTOPページへ
-Route::post('/top', 'member_loginController@posttop')->name("top.post");
+//ログアウトが押された場合TOPページへ
+Route::post('/top', 'member_loginController@logout')->name("top.post");
 
 
 
 //パスワード再設定（メール送信）ページへ遷移
 Route::get('/resetpw_send', 'member_loginController@getresetpw_send')->name("resetpw_send.show");
 //パスワード再設定の送信ボタンがPOSTされたとき
-Route::post('/resetpw_send', 'member_loginController@postresetpw_send')->name("resetpw_send.post");
+Route::post('/resetpw_send', 'member_loginController@getresetpw_sent')->name("resetpw_send.post");
 
 
 //パスワード再設定（メール送信完了）ページへ遷移
 Route::get('/resetpw_sent', 'member_loginController@getresetpw_sent')->name("resetpw_sent.show");
-//パスワード再設定の送信ボタンがPOSTされたとき
-Route::post('/resetpw_sent', 'member_loginController@postresetpw_sent')->name("resetpw_sent.post");
 
-
-//パスワード再設定（パスワード設定）ページへ遷移
-Route::get('/resettingpw', 'member_loginController@getresettingpw')->name("resettingpw.show");
-//パスワード再設定のパスワードリセットがPOSTされたとき
-Route::post('/resettingpw', 'member_loginController@postresettingpw')->name("resettingpw.post");
-
-
-
-Route::get('/resettingpw', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
-Route::post('/resettingpw', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 
 
 //////////////////////////ログイン認証///////////////////////
 Auth::routes();
 //ログインページへ遷移
-Route::get('/login', 'member_loginController@getlogin')->name("login.show");//->middleware('auth:members');
+Route::get('/login', 'member_loginController@getlogin')->name("login");//->middleware('auth:members');
 //ログインページでPOSTされたとき
 Route::post('/login', 'member_loginController@postlogin')->name("login.post");
 Route::post('/resetpw_send', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name("resetpw_send.post");
 
-
-Route::get('/top', 'member_loginController@logout');
+//TOPページへ遷移
+Route::get('/top', 'member_loginController@gettop')->name("top.show");
 
 
 ?>
