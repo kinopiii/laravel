@@ -56,10 +56,12 @@
         ようこそ&ensp;{{Auth::user()->name_sei}}&ensp;{{Auth::user()->name_mei}}様
         </div>
         <ul>
-          <li><a class="forgetpw" href="{{ route('top.post') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">ログアウト</a></li><br><br>
+          <li><a class="forgetpw" href="{{ route('top.post') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">ログアウト</a></li>
           <form id="logout-form" action="{{ route('top.post') }}" method="POST" style="display: none;">
           @csrf
-        </ul>
+          </form>
+          <li><a href="{{  route('products.show') }}">新規商品登録</a></li> 
+       </ul>
     </div>
 
 </body>

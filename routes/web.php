@@ -47,6 +47,17 @@ Route::post('/resetpw_send', 'member_loginController@getresetpw_sent')->name("re
 Route::get('/resetpw_sent', 'member_loginController@getresetpw_sent')->name("resetpw_sent.show");
 
 
+//商品登録ページを表示
+Route::get('/products_register', 'products_registerController@getproduct_register')->name("products.show");
+
+//商品登録ページでPOSTされたとき
+Route::post('/products_register', 'products_registerController@postproducts')->name("products.post");
+
+//商品登録確認画面を表示
+Route::get('/products_confirm', 'products_registerController@getproduct_confirm')->name("productconfirm.show");
+
+//商品登録確認ページでPOSTされたとき
+Route::post('/products_confirm', 'products_registerController@postproduct_confirm')->name("productconfirm.post");
 
 //////////////////////////ログイン認証///////////////////////
 Auth::routes();
