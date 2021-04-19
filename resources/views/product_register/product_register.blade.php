@@ -36,7 +36,7 @@
                 color:#FF9900;
                 font-size:18px;
                 font-weight:bold;
-                padding:10px 70px;
+                padding:10px 60px;
                 border-color: #FF9900;
                 border-radius: 5px;
                 text-decoration: none;
@@ -390,11 +390,20 @@ $('#imageUpload4').on('change', function (e) {
 
 {{Form::close()}}
 
-<br>
-<a href="/top" class="white-button">トップに戻る</a>
+<br><br>
+
+@if(url()->previous() == 'https://187200.tec-college.com/top')
+  <a href="/top" class="white-button">トップに戻る</a>
+@elseif(url()->previous() == 'https://187200.tec-college.com/products_list')
+  <a href="/products_list" class="white-button">商品一覧に戻る</a>
+@elseif(url()->previous() == 'https://187200.tec-college.com/products_comfirm')
+  <a href="/products_list" class="white-button">商品一覧に戻る</a>
+@endif
+
+
+<br><br><br>
 
 </div>
-
 
 </body>
 </html>

@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Validator;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 
 class products_registerController extends Controller
 {
@@ -23,6 +25,8 @@ class products_registerController extends Controller
         $category = product_category::get_category();
         $subcategory = product_subcategory::get_subcategory();
     
+        $request->session()->forget("returntop");
+        $request->session()->forget("returnlist");
 
         if($request->session()->exists('read_temp_path1')){
             $read_temp_path1 = $request->session()->get('read_temp_path1');
@@ -158,19 +162,47 @@ class products_registerController extends Controller
             ->withInput($input);
         }          
 
-        $temp_path1 = str_replace('storage/', 'public/', $read_temp_path1);
-        $filename1 = str_replace('public/temp/', '', $read_temp_path1);
-        $storage_path1 = 'public/producs/'.$filename1;
-        Storage::move($temp_path1, $storage_path1);
-       
 
-        
         $products = new \App\product;
         $products->member_id = Auth::id();
         $products->product_category_id = $input['category'];
         $products->product_subcategory_id = $input['subcategory'];
         $products->name = $input['name'];
-        $products->image_1 = $filename1;
+
+
+        if(isset($read_temp_path1)){
+            $temp_path1 = str_replace('storage/', 'public/', $read_temp_path1);
+            $filename1 = str_replace('public/temp/', '', $temp_path1);
+            $storage_path1 = 'public/products/'.$filename1;
+            Storage::move($temp_path1, $storage_path1);
+            $read_path1 = str_replace('public/', 'storage/', $storage_path1);
+            $products->image_1 = $read_path1;
+        }
+        if(isset($read_temp_path2)){
+            $temp_path2 = str_replace('storage/', 'public/', $read_temp_path2);
+            $filename2 = str_replace('public/temp/', '', $temp_path2);
+            $storage_path2 = 'public/products/'.$filename2;
+            Storage::move($temp_path2, $storage_path2);
+            $read_path2 = str_replace('public/', 'storage/', $storage_path2);
+            $products->image_2 = $read_path2;
+        }
+        if(isset($read_temp_path3)){
+            $temp_path3 = str_replace('storage/', 'public/', $read_temp_path3);
+            $filename3 = str_replace('public/temp/', '', $temp_path3);
+            $storage_path3 = 'public/products/'.$filename3;
+            Storage::move($temp_path3, $storage_path3);
+            $read_path3 = str_replace('public/', 'storage/', $storage_path3);
+            $products->image_3 = $read_path3;
+        }
+        if(isset($read_temp_path4)){
+            $temp_path4 = str_replace('storage/', 'public/', $read_temp_path4);
+            $filename4 = str_replace('public/temp/', '', $temp_path4);
+            $storage_path4 = 'public/products/'.$filename4;
+            Storage::move($temp_path4, $storage_path4);
+            $read_path4 = str_replace('public/', 'storage/', $storage_path4);
+            $products->image_4 = $read_path4;
+        }
+
         $products->product_content = $input['product_content'];
         $products->save();
 
@@ -180,8 +212,42 @@ class products_registerController extends Controller
         $request->session()->forget('read_temp_path2');
         $request->session()->forget('read_temp_path3');
         $request->session()->forget('read_temp_path4');
-
-        return view('member_login.top_login');
+        
+        return redirect()->action('member_loginController@gettop');
     }
+
+    //商品登録一覧ページ
+    public function getproduct_list(Request $request){
+        $category = product_category::get_category();
+        $subcategory = product_subcategory::get_subcategory();
+ 
+        if($request->has('search')){
+            $category_id = $request->get('category');
+            $subcategory_id = $request->get('subcategory');
+            $free = $request->get('free');
+    
+            //カテゴリテーブルから取得
+            $query = product::select();
+            $query->select('products.name as product_name','product_categorys.name as category_name','product_subcategorys.name as subcategory_name','products.image_1 as file');
+            $query->join('product_categorys', 'products.product_category_id','=','product_categorys.id');
+            $query->join('product_subcategorys', 'products.product_subcategory_id','=','product_subcategorys.id');
+            if(!empty($category_id)){
+                $query->where('products.product_category_id',$category_id);
+            }
+            if(!empty($subcategory_id)){
+                $query->where('products.product_subcategory_id',$subcategory_id);
+            }
+            if(!empty($free)){
+                $query->where('products.name',$free);
+                $query->orwhere('products.product_content',$free);
+            }
+            
+            $items = $query->orderBy('products.id', 'desc')->paginate(10);
+        }
+
+        
+
+        return view('product_register.product_list')->with(compact('category','subcategory','items'));
+    }    
 
 }

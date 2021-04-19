@@ -52,8 +52,9 @@
 
 <body>
     <div class="header">
-        <li><a href="{{ action('member_registerController@getmember_register') }}">新規会員登録</a></li>
         <li><a href="{{ action('member_loginController@getlogin') }}">ログイン</a></li>
+        <li><a href="{{ action('member_registerController@getmember_register') }}">新規会員登録</a></li>
+        <li><a href="{{ action('products_registerController@getproduct_list') }}">商品一覧</a></li>
     </div>
 
 </body>

@@ -61,6 +61,7 @@
           @csrf
           </form>
           <li><a href="{{  route('products.show') }}">新規商品登録</a></li> 
+          <li><a href="{{ action('products_registerController@getproduct_list') }}">商品一覧</a></li>
        </ul>
     </div>
 
