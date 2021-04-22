@@ -107,6 +107,17 @@
                 margin-left:150px;
                 margin-top:20px;
             }
+            .detail{
+                padding-top:95px;
+            }
+            .detailbutton{
+                display       : inline-block;
+                border-radius : 5px;
+                font-size     : 16pt;
+                padding       : 5px 50px;
+                background    : #0066FF;
+                color         : white;           
+            }            
 
         </style>
     </head>
@@ -218,8 +229,10 @@
                         
                         <div class="middle">            
                             <div class="category">{{$item->category_name}}  >　{{$item->subcategory_name}}</div>
-                            <div class="productname">{{$item->product_name}}</div>
+                            <div class="productname"><a href="/products_detail/{{$item->productid}}">{{$item->product_name}}</a></div>
                         </div>
+                        <div class="detail"><a href="/products_detail/{{$item->productid}}" class="detailbutton">詳細</a></div>
+
                     </div> 
                 </td>
             </tr>   

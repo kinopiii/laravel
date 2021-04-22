@@ -62,8 +62,8 @@ Route::post('/products_confirm', 'products_registerController@postproduct_confir
 //商品リストページを表示
 Route::get('/products_list', 'products_registerController@getproduct_list')->name("productslist.show");
 
-//商品リストページでPOSTされたとき
-//Route::post('/products_list', 'products_registerController@postproduct_list')->name("productslist.post");
+//商品詳細ページを表示
+Route::get('/products_detail/{id}', 'products_registerController@getproduct_detail')->name("productsdetail.show");
 
 //////////////////////////ログイン認証///////////////////////
 Auth::routes();

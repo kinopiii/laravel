@@ -228,7 +228,7 @@ class products_registerController extends Controller
     
             //カテゴリテーブルから取得
             $query = product::select();
-            $query->select('products.name as product_name','product_categorys.name as category_name','product_subcategorys.name as subcategory_name','products.image_1 as file');
+            $query->select('products.name as product_name','product_categorys.name as category_name','product_subcategorys.name as subcategory_name','products.image_1 as file','products.id as productid');
             $query->join('product_categorys', 'products.product_category_id','=','product_categorys.id');
             $query->join('product_subcategorys', 'products.product_subcategory_id','=','product_subcategorys.id');
             if(!empty($category_id)){
@@ -245,9 +245,18 @@ class products_registerController extends Controller
             $items = $query->orderBy('products.id', 'desc')->paginate(10);
         }
 
-        
-
         return view('product_register.product_list')->with(compact('category','subcategory','items'));
-    }    
+    }   
+    
+    //商品詳細ページ
+    public function getproduct_detail($id){
+        $query = product::where('products.id', $id);
+        $query->select('products.name as product_name','product_categorys.name as category_name','product_subcategorys.name as subcategory_name','products.image_1 as file1','products.image_2 as file2','products.image_3 as file3','products.image_4 as file4','products.product_content as content','products.updated_at as update');
+        $query->join('product_categorys', 'products.product_category_id','=','product_categorys.id');
+        $query->join('product_subcategorys', 'products.product_subcategory_id','=','product_subcategorys.id');
+        $items = $query->first();
+
+        return view('product_register.product_detail', compact('items'));
+    }   
 
 }
