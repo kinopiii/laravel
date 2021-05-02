@@ -15,6 +15,12 @@
     return view('welcome');
 });*/
 
+
+/*
+|--------------------------------------------------------------------------
+| 会員登録
+|--------------------------------------------------------------------------
+*/
 //会員登録
 Route::get('/', 'member_registerController@getmember_register')->name("form.show");
 //POSTされたときのルーティング
@@ -46,6 +52,11 @@ Route::post('/resetpw_send', 'member_loginController@getresetpw_sent')->name("re
 //パスワード再設定（メール送信完了）ページへ遷移
 Route::get('/resetpw_sent', 'member_loginController@getresetpw_sent')->name("resetpw_sent.show");
 
+/*
+|--------------------------------------------------------------------------
+| 商品登録
+|--------------------------------------------------------------------------
+*/
 
 //商品登録ページを表示
 Route::get('/products_register', 'products_registerController@getproduct_register')->name("products.show");
@@ -65,6 +76,11 @@ Route::get('/products_list', 'products_registerController@getproduct_list')->nam
 //商品詳細ページを表示
 Route::get('/products_detail/{id}', 'products_registerController@getproduct_detail')->name("productsdetail.show");
 
+/*
+|--------------------------------------------------------------------------
+| 商品レビュー
+|--------------------------------------------------------------------------
+*/
 
 //商品レビュー登録画面を表示
 Route::get('/review_register/{id}', 'products_registerController@getreview_register')->name("reviewregister.show");
@@ -84,8 +100,19 @@ Route::get('/review_complete/{id}', 'products_registerController@getreview_compl
 //商品レビュー一覧画面を表示
 Route::get('/review_list/{id}', 'products_registerController@getreview_list')->name("reviewrlist.show");
 
+/*
+|--------------------------------------------------------------------------
+| マイページ
+|--------------------------------------------------------------------------
+*/
+//マイページを表示
+Route::get('/mypage', 'mypageController@getmypage')->name("mypage.show");
 
-//////////////////////////ログイン認証///////////////////////
+/*
+|--------------------------------------------------------------------------
+| ログイン認証
+|--------------------------------------------------------------------------
+*/
 Auth::routes();
 //ログインページへ遷移
 Route::get('/login', 'member_loginController@getlogin')->name("login");//->middleware('auth:members');
