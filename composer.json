@@ -13,7 +13,8 @@
         "kalnoy/nestedset": "^5.0",
         "laravel/framework": "^6.20",
         "laravel/tinker": "^2.5",
-        "laravelcollective/html": "6.*"
+        "laravelcollective/html": "6.*",
+        "nesbot/carbon": "^2.46"
     },
     "require-dev": {
         "facade/ignition": "^1.16.4",

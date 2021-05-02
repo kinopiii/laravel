@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>マイページ</title>
+        <title>退会ページ</title>
 
 
         <style>
@@ -49,35 +49,34 @@
             }
 
             .container{
-                text-align:left;
+                text-align:center;
                 font-size:20px;
-                margin-top:60px;
+                margin-top:80px;
                 margin-left: auto;
                 margin-right: auto;
                 width:40%;
             }
 
-            .item{
-                margin-top:40px;
-            }
+            .white-button{
+                display       : inline-block;
+                border-radius : 5px;
+                font-size     : 14pt;
+                padding       : 5px 15px;
+                background    : white;
+                color         : #0066FF;   
+                border-color  : #0066FF; 
+                text-decoration:none;       
+            }   
 
-            .name{
-                display:inline-block;
-                width:250px; 
-            }
-
-            .button{
+            .blue-button{
+                display       : inline-block;
                 border-radius : 5px;
                 font-size     : 14pt;
                 padding       : 5px 50px;
-                background    : white;
-                color         : #0066FF;   
-                border-color  : #0066FF;        
-            }   
-            .buttons{
-                display:inline-block;
-                margin-left:250px;
+                background    : #0066FF;
+                color         : white;           
             }
+
         </style>
     </head>
 
@@ -97,25 +96,15 @@
     </div>
 
     <div class="container">
-        <div class="item"><span class="name">氏名</span> {{ $items['name_sei'] }} {{ $items['name_mei'] }}</div>
-        <div class="item"><span class="name">ニックネーム</span> {{ $items['nickname'] }}</div>
-        <div class="item">
-        <span class="name">性別</span>
-        @foreach(config('master.gender') as $key => $value)
-        @if($items['gender'] == $key) {{ $value }} @endif
-        @endforeach
-        </div>
-        <div class="item"><span class="name">パスワード</span> セキュリティのため非表示</div>
-        <div class="item"><span class="name">メールアドレス</span> {{ $items['email'] }}</div>
-    
-        <div class="item">
-            <span class="buttons">
-                <form action="{{  route('mypage.post') }}" method="post">
-                @csrf
-                <button class="button" name="withdrawal" type="submit">退会</button>
-                </form>
-            </span>
-        </div>
+        退会します。よろしいですか？<br><br><br>
+
+        <a href="{{  route('mypage.show') }}" class="white-button">マイページに戻る</a><br><br>
+
+        <form action="{{  route('withdrawal.post') }}" method="post">
+        @csrf
+        <button class="blue-button" name="withdrawal" type="submit">退会する</button>
+        </form>
     </div>
+
 </body>
 </html>

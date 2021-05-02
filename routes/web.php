@@ -108,6 +108,14 @@ Route::get('/review_list/{id}', 'products_registerController@getreview_list')->n
 //マイページを表示
 Route::get('/mypage', 'mypageController@getmypage')->name("mypage.show");
 
+//マイページで「退会｣ボタンが押されたとき
+Route::post('/mypage', 'mypageController@postmypage')->name("mypage.post");
+
+//退会ページを表示
+Route::get('/withdrawal', 'mypageController@getwithdrawal')->name("withdrawal.show");
+
+//退会ページで「退会する｣が押されたとき
+Route::post('/withdrawal', 'mypageController@postwithdrawal')->name("withdrawal.post");
 /*
 |--------------------------------------------------------------------------
 | ログイン認証
