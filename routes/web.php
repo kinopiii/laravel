@@ -65,6 +65,26 @@ Route::get('/products_list', 'products_registerController@getproduct_list')->nam
 //商品詳細ページを表示
 Route::get('/products_detail/{id}', 'products_registerController@getproduct_detail')->name("productsdetail.show");
 
+
+//商品レビュー登録画面を表示
+Route::get('/review_register/{id}', 'products_registerController@getreview_register')->name("reviewregister.show");
+
+//商品レビュー登録画面でPOSTされた
+Route::post('/review_register/{id}', 'products_registerController@postreview_register')->name("reviewregister.post");
+
+//商品レビュー登録確認画面を表示
+Route::get('/review_confirm/{id}', 'products_registerController@getreview_confirm')->name("reviewconfirm.show");
+
+//商品レビュー登録確認画面でPOSTされた
+Route::post('/review_confirm/{id}', 'products_registerController@postreview_confirm')->name("reviewconfirm.post");
+
+//商品レビュー登録完了画面を表示
+Route::get('/review_complete/{id}', 'products_registerController@getreview_complete')->name("reviewcomplete.show");
+
+//商品レビュー一覧画面を表示
+Route::get('/review_list/{id}', 'products_registerController@getreview_list')->name("reviewrlist.show");
+
+
 //////////////////////////ログイン認証///////////////////////
 Auth::routes();
 //ログインページへ遷移

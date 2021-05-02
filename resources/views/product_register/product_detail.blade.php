@@ -56,7 +56,16 @@
                 background    : #0066FF;
                 color         : white;   
                 text-decoration:none;        
-            }   
+            } 
+            .registbutton{
+                display       : inline-block;
+                border-radius : 5px;
+                font-size     : 14pt;
+                padding       : 5px 15px;
+                background    : white;
+                color         : #0066FF;  
+                border        : solid 1px #0066FF;                 
+            }  
             .category{
                 font-size:18px;
                 text-align:left;
@@ -78,14 +87,18 @@
             .content{
                 font-size:18px;
                 text-align:left;
-                margin-bottom:60px;
+                margin-bottom:40px;
             }
             .return{
-                margin-left:400px;
+                margin-left:600px;
             }
             .middle{
                 text-align:left;
                 margin-bottom:25px;
+            }
+            .reviewbuttun{
+                margin-left:430px;
+                margin-bottom:15px;
             }
         </style>
     </head>
@@ -141,6 +154,32 @@
         ■商品説明<br>
         {{ $items->content }}
     </div>
+
+    <div class="content">
+        ■商品レビュー<br><br>
+        総合評価&emsp;
+        @if($totalevaluation == 1)
+        　★
+        @elseif($totalevaluation == 2)
+        　★★
+        @elseif($totalevaluation == 3)
+        　★★★
+        @elseif($totalevaluation == 4)
+        　★★★★
+        @elseif($totalevaluation == 5)
+        　★★★★★
+        @endif
+        &emsp; 
+        {{$totalevaluation}} <br><br>
+
+        <a href="/review_list/{{$id}}" class="blue-button">>>レビューを見る</a> 
+    </div>
+
+    @if(Auth::check())
+    <div class="reviewbuttun">
+        <a href="/review_register/{{$items->productid}}" class="registbutton">この商品についてのレビューを登録</a>
+    </div>
+    @endif
 
     <div class="return">
         <button class="button" onClick="history.back()">商品一覧に戻る</button>
