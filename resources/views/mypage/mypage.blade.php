@@ -58,7 +58,7 @@
             }
 
             .item{
-                margin-top:40px;
+                margin-top:30px;
             }
 
             .name{
@@ -73,7 +73,34 @@
                 background    : white;
                 color         : #0066FF;   
                 border-color  : #0066FF;        
-            }   
+            } 
+            .blue-button1{
+                display       : inline-block;
+                border-radius : 5px;
+                font-size     : 14pt;
+                padding       : 5px 40px;
+                background    : #0066FF;
+                color         : white;    
+                margin-top:10px;       
+            }  
+            .blue-button2{
+                display       : inline-block;
+                border-radius : 5px;
+                font-size     : 14pt;
+                padding       : 5px 30px;
+                background    : #0066FF;
+                color         : white;   
+                margin-top:10px;         
+            } 
+            .blue-button3{
+                display       : inline-block;
+                border-radius : 5px;
+                font-size     : 14pt;
+                padding       : 5px 10px;
+                background    : #0066FF;
+                color         : white;  
+                margin-top:10px;          
+            } 
             .buttons{
                 display:inline-block;
                 margin-left:250px;
@@ -97,6 +124,8 @@
     </div>
 
     <div class="container">
+    <form action="{{  route('mypage.post') }}" method="post">
+    @csrf
         <div class="item"><span class="name">氏名</span> {{ $items['name_sei'] }} {{ $items['name_mei'] }}</div>
         <div class="item"><span class="name">ニックネーム</span> {{ $items['nickname'] }}</div>
         <div class="item">
@@ -105,17 +134,25 @@
         @if($items['gender'] == $key) {{ $value }} @endif
         @endforeach
         </div>
+        <span class="buttons">
+            <button class="blue-button1" name="changeinfo" type="submit">会員情報変更</button>
+        </span>
         <div class="item"><span class="name">パスワード</span> セキュリティのため非表示</div>
+        <span class="buttons">
+            <button class="blue-button2" name="changepass" type="submit">パスワード変更</button>
+        </span>
         <div class="item"><span class="name">メールアドレス</span> {{ $items['email'] }}</div>
-    
+        <span class="buttons">
+            <button class="blue-button3" name="changemail" type="submit">メールアドレス変更</button>
+        </span>
         <div class="item">
             <span class="buttons">
-                <form action="{{  route('mypage.post') }}" method="post">
-                @csrf
                 <button class="button" name="withdrawal" type="submit">退会</button>
-                </form>
             </span>
         </div>
+    </form>
+            
+        
     </div>
 </body>
 </html>

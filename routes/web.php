@@ -116,12 +116,45 @@ Route::get('/withdrawal', 'mypageController@getwithdrawal')->name("withdrawal.sh
 
 //退会ページで「退会する｣が押されたとき
 Route::post('/withdrawal', 'mypageController@postwithdrawal')->name("withdrawal.post");
+
+//会員情報変更ページを表示
+Route::get('/changeinfo', 'mypageController@getchangeinfo')->name("changeinfo.show");
+
+//会員情報変更ページで「確認画面へ｣が押されたとき
+Route::post('/changeinfo', 'mypageController@postchangeinfo')->name("changeinfo.post");
+
+//会員情報変更確認ページを表示
+Route::get('/confirminfo', 'mypageController@getconfirminfo')->name("confirminfo.show");
+
+//会員情報変更確認ページでPOST
+Route::post('/confirminfo', 'mypageController@postconfirminfo')->name("confirminfo.post");
+
+//パスワード変更ページを表示
+Route::get('/changepass', 'mypageController@getchangepass')->name("changepass.show");
+
+//パスワード変更ページでPOST
+Route::post('/changepass', 'mypageController@postchangepass')->name("changepass.post");
+
+//メールアドレス変更ページを表示
+Route::get('/changemail', 'mypageController@getchangemail')->name("changemail.show");
+
+//メールアドレス変更ページでPOST
+Route::post('/changemail', 'mypageController@postchangemail')->name("changemail.post");
+
+
+
+//メールアドレス変更認証完了ページを表示
+Route::get('/completemail', 'mypageController@getcompletemail')->name("completemail.show");
+
+//メールアドレス変更認証完了ページでPOST
+Route::post('/completemail', 'mypageController@postcompletemail')->name("completemail.post");
+
 /*
 |--------------------------------------------------------------------------
 | ログイン認証
 |--------------------------------------------------------------------------
 */
-Auth::routes();
+Auth::routes(['verify' => true]);
 //ログインページへ遷移
 Route::get('/login', 'member_loginController@getlogin')->name("login");//->middleware('auth:members');
 //ログインページでPOSTされたとき
@@ -130,6 +163,8 @@ Route::post('/resetpw_send', 'Auth\ForgotPasswordController@sendResetLinkEmail')
 
 //TOPページへ遷移
 Route::get('/top', 'member_loginController@gettop')->name("top.show");
+
+
 
 
 ?>
