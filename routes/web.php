@@ -175,6 +175,22 @@ Route::get('/review_delete/{id}', 'mypageController@getreview_delete')->name("re
 //商品レビュー削除確認ページでPOST
 Route::post('/review_delete/{id}', 'mypageController@postreview_delete')->name("reviews_delete.post");
 
+/*
+|--------------------------------------------------------------------------
+| 管理者機能
+|--------------------------------------------------------------------------
+*/
+//管理者ログインフォームを表示
+Route::get('/manage_login', 'ManagementController@getlogin')->name("manage_login.show");
+
+//管理者ログインフォームでPOST
+Route::post('/manage_login', 'ManagementController@postlogin')->name("manage_login.post");
+
+//管理者トップページを表示
+Route::get('/manage_top', 'ManagementController@gettop')->name("manage_top.show");
+
+//管理者トップページでPOST
+Route::post('/manage_top', 'ManagementController@posttop')->name("manage_top.post");
 
 /*
 |--------------------------------------------------------------------------
