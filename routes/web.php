@@ -149,6 +149,33 @@ Route::get('/completemail', 'mypageController@getcompletemail')->name("completem
 //メールアドレス変更認証完了ページでPOST
 Route::post('/completemail', 'mypageController@postcompletemail')->name("completemail.post");
 
+
+
+//商品レビュー管理ページを表示
+Route::get('/review_manage', 'mypageController@getreview_manage')->name("review_manage.show");
+
+//商品レビュー管理ページでPOST
+Route::post('/review_manage', 'mypageController@postreview_manage')->name("review_manage.post");
+
+//商品レビュー編集ページを表示
+Route::get('/review_edit/{id}', 'mypageController@getreview_edit')->name("reviews_edit.show");
+
+//商品レビュー編集ページでPOST
+Route::post('/review_edit/{id}', 'mypageController@postreview_edit')->name("reviews_edit.post");
+
+//商品レビュー編集確認ページを表示
+Route::get('/review_confirm/{id}', 'mypageController@getreview_confirm')->name("reviews_confirm.show");
+
+//商品レビュー編集確認ページでPOST
+Route::post('/review_confirm/{id}', 'mypageController@postreview_confirm')->name("reviews_confirm.post");
+
+//商品レビュー削除確認ページを表示
+Route::get('/review_delete/{id}', 'mypageController@getreview_delete')->name("reviews_delete.show");
+
+//商品レビュー削除確認ページでPOST
+Route::post('/review_delete/{id}', 'mypageController@postreview_delete')->name("reviews_delete.post");
+
+
 /*
 |--------------------------------------------------------------------------
 | ログイン認証

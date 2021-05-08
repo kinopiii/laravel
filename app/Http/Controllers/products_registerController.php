@@ -259,8 +259,9 @@ class products_registerController extends Controller
         $items = $query->first();
 
         //総合評価を取得
-        $avgevaluation = Review::avg('evaluation');
-        $totalevaluation = floor($avgevaluation);
+        $avgevaluation = Review::where('product_id', $id)
+        ->avg('evaluation');
+        $totalevaluation = floor($avgevaluation);  
 
         
         session()->put('id', $id);
@@ -272,8 +273,9 @@ class products_registerController extends Controller
     public function getreview_register(Request $request ,$id){
         if (Auth::check()){
             //総合評価を取得
-            $avgevaluation = Review::avg('evaluation');
-            $totalevaluation = floor($avgevaluation); 
+            $avgevaluation = Review::where('product_id', $id)
+            ->avg('evaluation');
+            $totalevaluation = floor($avgevaluation);  
 
             $request->session()->put('id', $id);      
 
@@ -334,8 +336,9 @@ class products_registerController extends Controller
         $input = $request->session()->get('form_input');
 
        //総合評価を取得
-       $avgevaluation = Review::avg('evaluation');
-       $totalevaluation = floor($avgevaluation);            
+       $avgevaluation = Review::where('product_id', $id)
+       ->avg('evaluation');
+       $totalevaluation = floor($avgevaluation);     
 
         $ids = Review::where('product_id', '=', $id)->first();
         if($ids === null){

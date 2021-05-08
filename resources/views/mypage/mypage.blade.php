@@ -101,6 +101,16 @@
                 color         : white;  
                 margin-top:10px;          
             } 
+            .blue-button4{
+                display       : inline-block;
+                border-radius : 5px;
+                font-size     : 14pt;
+                padding       : 5px 25px;
+                background    : #0066FF;
+                color         : white;  
+                margin-top:10px;  
+                text-decoration: none;        
+            } 
             .buttons{
                 display:inline-block;
                 margin-left:250px;
@@ -145,6 +155,11 @@
         <span class="buttons">
             <button class="blue-button3" name="changemail" type="submit">メールアドレス変更</button>
         </span>
+        <div class="item">
+            <span class="buttons">
+            <a href="/review_manage" class="blue-button4">商品レビュー管理</a>
+            </span>
+        </div>
         <div class="item">
             <span class="buttons">
                 <button class="button" name="withdrawal" type="submit">退会</button>

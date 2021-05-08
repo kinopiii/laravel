@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\product;
+use App\product_category;
+use App\product_subcategory;
+use App\Review;
 use Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -246,7 +250,129 @@ class mypageController extends Controller
         }
         
     }    
+
+    //商品レビュー管理ページを表示
+    public function getreview_manage(){
+        //reviewsテーブルから取得
+        $id = Auth::id();
+        $query = Review::where('reviews.member_id', $id);
+        $query->select('reviews.id as reviewid','products.name as product_name','products.image_1 as file1','reviews.evaluation as evaluation','reviews.comment as comment','product_categorys.name as category_name','product_subcategorys.name as subcategory_name');
+        $query->join('products', 'products.id','=','reviews.product_id');
+        $query->join('product_categorys', 'products.product_category_id','=','product_categorys.id');
+        $query->join('product_subcategorys', 'products.product_subcategory_id','=','product_subcategorys.id');
+        $items = $query->paginate(5);
+
+        return view('mypage.review_manage', compact('items'));
+    }    
+
+    //商品レビュー編集ページを表示
+    public function getreview_edit($id){
+
+        //総合評価を取得
+        $product_id = Review::where('id', $id)->value('product_id');  
+        $avgevaluation = Review::where('product_id', $product_id)
+        ->avg('evaluation');
+        $totalevaluation = floor($avgevaluation);            
+
+        $query = Review::where('reviews.id', $id);
+        $query->select('products.name as product_name','products.image_1 as file1','reviews.evaluation as evaluations','reviews.comment as comments','products.id as product_id');
+        $query->join('products', 'products.id','=','reviews.product_id');
+        $items = $query->first();
+
+        session(['id' => $id ]); 
+        return view('mypage.review_edit', compact('items','totalevaluation','id')); 
+    }    
+
+    //商品レビュー編集ページでPOSTされたとき
+    private $Items = ['comment', 'evaluation'];
+    public function postreview_edit(Request $request,$id){
+        $input = $request->only($this->Items);
+        $rules = [
+            'comment' => 'required|max:500',
+            'evaluation' => 'required|numeric|between:1,5',
+        ];
+
+        $messages = [
+            'comment.required' => '※商品コメントは必須入力です。',
+            'comment.max'  => '※商品コメントは500字以内で入力してください',
+            'evaluation.required' => '※商品評価は必須入力です。',
+            'evaluation.numeric' => '※商品評価はリストから選択してください。',
+            'evaluation.between' => '※商品評価はリストから選択してください。',
+        ];
+
+        $id = $request->id;
+
+        $validator = Validator::make($input, $rules, $messages);
+        if($validator->fails()){
+            return redirect()->action('mypageController@getreview_edit',['id'=>$id])
+                ->withErrors($validator)
+                ->withInput();
+        }
+        $request->session()->put('form_input', $input);
         
+        return redirect()->action('mypageController@getreview_confirm', compact('id'));
+    }  
+
+
+    //商品レビュー編集確認ページを表示
+    public function getreview_confirm(Request $request,$id){
+        $input = $request->session()->get('form_input');
+        $id = $request->id;
+        //総合評価を取得
+        $product_id = Review::where('id', $id)->value('product_id');  
+        $avgevaluation = Review::where('product_id', $product_id)
+        ->avg('evaluation');
+        $totalevaluation = floor($avgevaluation);  
+
+        $query = product::where('products.id', $product_id);
+        $query->select('products.name as product_name','products.image_1 as file1','reviews.evaluation as evaluations','reviews.id as review_id');
+        $query->join('reviews', 'products.id','=','reviews.product_id');
+        $items = $query->first();
+
+        //セッションのデータを削除
+        $request->session()->forget("form_input");  
+   
+
+        return view('mypage.review_confirm', compact('input','items','totalevaluation','id'));
+    }    
+
+    //商品レビュー編集確認ページをPOST
+    public function postreview_confirm(Request $request,$id){
+        $input = $request->only($this->Items);
+        $id = $request->session()->get('id');
+        $reviews = Review::where('id',$id)->first();
+        $reviews->comment = $input['comment'];
+        $reviews->evaluation = $input['evaluation'];
+        $reviews->save();
+
+        return redirect()->action('mypageController@getreview_manage');
+    }    
+    
+    //商品レビュー削除確認ページを表示
+    public function getreview_delete($id){
+        //総合評価を取得
+        $product_id = Review::where('id', $id)->value('product_id');  
+        $avgevaluation = Review::where('product_id', $product_id)
+        ->avg('evaluation');
+        $totalevaluation = floor($avgevaluation);            
+
+        $query = Review::where('reviews.id', $id);
+        $query->select('products.name as product_name','products.image_1 as file1','reviews.evaluation as evaluation','reviews.comment as comment','products.id as product_id','reviews.id as review_id');
+        $query->join('products', 'products.id','=','reviews.product_id');
+        $items = $query->first();
+
+        return view('mypage.review_delete', compact('items','totalevaluation','id')); 
+    }    
+    
+    //商品レビュー削除ページをPOST
+    public function postreview_delete($id){
+        $reviews = Review::where('id',$id)->first();
+        $reviews->deleted_at = Carbon::now();
+        $reviews->save();
+
+        return redirect()->action('mypageController@getreview_manage');
+    }       
+    
         
 }
 ?>
