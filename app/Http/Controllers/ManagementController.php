@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Management;
+use App\Member;
 
 class ManagementController extends Controller
 {
@@ -80,6 +81,36 @@ class ManagementController extends Controller
         }
     }
 
+    //会員一覧ページ
+    public function getmember_list(Request $request){
+        if($request->has('search')){
+            $id = $request->get('id');
+            $gender1 = $request->get('gender1');
+            $gender2 = $request->get('gender2');
+            $free = $request->get('free');
+
+            $query = Member::select();
+            if(!empty($id)){
+                $query->where('id',$id);
+            }
+            if(!empty($gender1) && !empty($gender2)){
+                $query->where('gender',$gender1);
+                $query->orwhere('gender',$gender2);
+            }elseif(!empty($gender1)){
+                $query->where('gender',$gender1);
+            }elseif(!empty($gender2)){
+                $query->where('gender',$gender2);
+            }
+            if(!empty($free)){
+                $query->where('name_sei',$free);
+                $query->orwhere('name_mei',$free);
+                $query->orwhere('email',$free);
+            }
+            
+            $items = $query->sortable()->paginate(10);         
+        }
+        return view('management.member_list',compact('items'));
+    }
 
 
     

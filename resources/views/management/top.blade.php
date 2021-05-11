@@ -40,11 +40,28 @@
                 padding-left:50px;
                 width:40%;
             }
+            .container{
+                text-align:center;
+            }
             .logout{
                 background: transparent;
                 padding:15px 30px 15px 30px;
                 font-size:20px;
-                margin-top:-15px
+                margin-top:-25px
+            }
+            .white-button{
+                background-color:white;
+                color:#0066FF;
+                font-size:20px;
+                font-weight:bold;
+                padding:10px 60px;
+                border-color: #0066FF;
+                border-radius: 5px;
+                text-decoration:none;
+            }
+            .button{
+                margin-right:1000px;
+                margin-top:100px;
             }
         </style>
     </head>
@@ -64,5 +81,10 @@
        </ul>
     </div>
 
+    <div class="container">
+        <div class="button">
+            <a href="{{ action('ManagementController@getmember_list') }}" class="white-button">会員一覧</a>
+        </div>
+    </div>
 </body>
 </html>

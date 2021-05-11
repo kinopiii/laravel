@@ -164,10 +164,10 @@ Route::get('/review_edit/{id}', 'mypageController@getreview_edit')->name("review
 Route::post('/review_edit/{id}', 'mypageController@postreview_edit')->name("reviews_edit.post");
 
 //商品レビュー編集確認ページを表示
-Route::get('/review_confirm/{id}', 'mypageController@getreview_confirm')->name("reviews_confirm.show");
+Route::get('/mypage_review_confirm/{id}', 'mypageController@getreview_confirm')->name("reviews_confirm.show");
 
 //商品レビュー編集確認ページでPOST
-Route::post('/review_confirm/{id}', 'mypageController@postreview_confirm')->name("reviews_confirm.post");
+Route::post('/mypage_review_confirm/{id}', 'mypageController@postreview_confirm')->name("reviews_confirm.post");
 
 //商品レビュー削除確認ページを表示
 Route::get('/review_delete/{id}', 'mypageController@getreview_delete')->name("reviews_delete.show");
@@ -191,6 +191,12 @@ Route::get('/manage_top', 'ManagementController@gettop')->name("manage_top.show"
 
 //管理者トップページでPOST
 Route::post('/manage_top', 'ManagementController@posttop')->name("manage_top.post");
+
+//会員一覧ページを表示
+Route::get('/member_list', 'ManagementController@getmember_list')->name("member_list.show");
+
+//会員一覧ページでPOST
+Route::post('/member_list', 'ManagementController@postmember_list')->name("member_list.post");
 
 /*
 |--------------------------------------------------------------------------
