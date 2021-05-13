@@ -198,6 +198,24 @@ Route::get('/member_list', 'ManagementController@getmember_list')->name("member_
 //会員一覧ページでPOST
 Route::post('/member_list', 'ManagementController@postmember_list')->name("member_list.post");
 
+//会員登録ページを表示
+Route::get('/manage_member_register', 'ManagementController@getmember_register')->name("manage_member_register.show");
+
+//会員登録ページでPOST
+Route::post('/manage_member_register', 'ManagementController@postmember_register')->name("manage_member_register.post");
+
+//会員編集ページを表示
+Route::get('/manage_member_edit/{id}', 'ManagementController@getmember_edit')->name("manage_member_edit.show");
+
+//会員編集ページでPOST
+Route::post('/manage_member_edit', 'ManagementController@postmember_edit')->name("manage_member_edit.post");
+
+//会員登録/編集確認ページを表示
+Route::get('/manage_member_confirm', 'ManagementController@getmember_confirm')->name("manage_member_confirm.show");
+
+//会員登録/編集確認ページでPOST
+Route::post('/manage_member_confirm', 'ManagementController@postmember_confirm')->name("manage_member_confirm.post");
+
 /*
 |--------------------------------------------------------------------------
 | ログイン認証

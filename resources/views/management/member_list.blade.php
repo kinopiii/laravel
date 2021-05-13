@@ -59,6 +59,15 @@
                 border-radius: 5px;
                 text-decoration:none;
             }
+            .blue-button{
+                background-color:#0066FF;
+                color:white;
+                font-size:18px;
+                font-weight:bold;
+                padding:10px 60px;
+                border-style: none;
+                border-radius: 5px;
+            }
             .tabledata{
                 margin-top:20px;
             }
@@ -74,6 +83,10 @@
                 border: none;  
                 outline: none; 
                 background: transparent; 
+            }
+            .register{
+                margin-top:20px;
+                margin-right:410px;
             }
 
         </style>
@@ -91,7 +104,9 @@
     </div>
 
     <div class="container">
-
+    <div Class="register">
+    <a href="/manage_member_register" class="blue-button">会員登録</a>
+    </div>
         <form method="get" action="{{ route('member_list.show') }}">
         @csrf
             <div class="tabledata">
@@ -129,6 +144,7 @@
             <th width="80" bgcolor="B0C4DE" style="border-style:dashed;">登録日時
                 @sortablelink('created_at', '▼')
             </th>
+            <th width="50" bgcolor="B0C4DE" style="border-style:dashed;">編集</th>
     </form>
             @foreach($items as $item) 
                 <tr>
@@ -141,6 +157,7 @@
                     @endforeach
                     </td>
                     <td bgcolor="white" style="border-style:dashed;">{{$item->created_at->format('Y/m/d')}}</td>
+                    <td bgcolor="white" style="border-style:dashed;"><a href="/manage_member_edit/{{$item->id}}">編集</a></td>
                 </tr>   
             @endforeach
         </table>
