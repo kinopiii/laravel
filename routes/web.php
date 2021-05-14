@@ -222,6 +222,10 @@ Route::get('/manage_member_detail/{id}', 'ManagementController@getmember_detail'
 //会員詳細ページでPOST
 Route::post('/manage_member_detail', 'ManagementController@postmember_detail')->name("manage_member_detail.post");
 
+
+//商品カテゴリ一覧ページを表示
+Route::get('/product_cate_list', 'ManagementController@getproduct_cate_list')->name("product_cate_list.show");
+
 /*
 |--------------------------------------------------------------------------
 | ログイン認証

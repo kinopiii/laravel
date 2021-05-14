@@ -54,14 +54,26 @@
                 color:#0066FF;
                 font-size:20px;
                 font-weight:bold;
-                padding:10px 60px;
+                padding:10px 70px;
                 border-color: #0066FF;
                 border-radius: 5px;
                 text-decoration:none;
+                border-style: solid;
+            }
+            .white-button2{
+                background-color:white;
+                color:#0066FF;
+                font-size:20px;
+                font-weight:bold;
+                padding:10px 30px;
+                border-color: #0066FF;
+                border-radius: 5px;
+                text-decoration:none;
+                border-style: solid;
             }
             .button{
                 margin-right:1000px;
-                margin-top:100px;
+                margin-top:90px;
             }
         </style>
     </head>
@@ -84,6 +96,9 @@
     <div class="container">
         <div class="button">
             <a href="{{ action('ManagementController@getmember_list') }}" class="white-button">会員一覧</a>
+        </div>
+        <div class="button">
+            <a href="{{ action('ManagementController@getproduct_cate_list') }}" class="white-button2">商品カテゴリ一覧</a>
         </div>
     </div>
 </body>

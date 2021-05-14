@@ -7,6 +7,7 @@ use Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Management;
 use App\Member;
+use App\product;
 use Carbon\Carbon;
 
 class ManagementController extends Controller
@@ -109,7 +110,7 @@ class ManagementController extends Controller
                 $query->orwhere('email',$free);
             }
             
-            $items = $query->sortable()->paginate(10);         
+            $items = $query->sortable()->orderBy('id', 'desc')->paginate(10);         
         }
         return view('management.member_list',compact('items'));
     }
@@ -314,4 +315,30 @@ class ManagementController extends Controller
         return redirect()->action('ManagementController@getmember_list');
     }
 
+
+    //商品カテゴリ一覧ページ
+    public function getproduct_cate_list(Request $request){
+        if($request->has('search')){
+            $id = $request->get('id');
+            $free = $request->get('free');
+
+            $query = product::select();
+
+
+            if(!empty($id)){
+                $query->where('id',$id);
+            }
+            if(!empty($free)){
+                $query->where('product_categorys.name',$free);
+                $query->orwhere('product_subcategorys.name',$free);
+            }
+
+            $query->select('products.id as id','products.created_at as created_at','product_categorys.name as category');
+            $query->join('product_categorys', 'products.product_category_id','=','product_categorys.id');
+            $query->join('product_subcategorys', 'products.product_subcategory_id','=','product_subcategorys.id');
+            
+            $items = $query->sortable()->orderBy('id', 'desc')->paginate(10);         
+        }
+        return view('management.product_cate_list',compact('items'));
+    }
 }
