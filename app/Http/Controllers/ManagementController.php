@@ -7,6 +7,7 @@ use Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Management;
 use App\Member;
+use Carbon\Carbon;
 
 class ManagementController extends Controller
 {
@@ -260,8 +261,7 @@ class ManagementController extends Controller
 
     //会員登録・編集確認ページでPOST
     public function postmember_confirm(Request $request){
-        
-        
+
         if(session()->has('id')){
             //会員編集の場合
             $id = session('id'); 
@@ -295,7 +295,23 @@ class ManagementController extends Controller
         session()->forget('id');
 
         return redirect()->action('ManagementController@getmember_list');
+    }
 
+    //会員詳細ページ
+    public function getmember_detail($id){
+        $query = Member::where('id', $id);
+        $items = $query->first();
+        session()->put('id', $id);
+        return view('management.member_detail',compact('items','id'));
+    }
+
+    //会員詳細でPOST
+    public function postmember_detail(){
+        $id = session('id'); 
+        $query = Member::where('id', $id)->first();
+        $query->deleted_at = Carbon::now();
+        $query->save();
+        return redirect()->action('ManagementController@getmember_list');
     }
 
 }

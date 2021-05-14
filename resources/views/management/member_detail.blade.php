@@ -61,6 +61,8 @@
                 border-color: #0066FF;
                 border-radius: 5px;
                 text-decoration:none;
+                margin-right:20px;
+                border-style: solid;
             }
             .items{
                 margin-bottom:20px;
@@ -80,11 +82,7 @@
 <body>
     <div class="header">
         <div class="header-left">
-        @if( url()->previous() === url("/manage_member_register"))
-            <h3>会員登録</h3>
-        @else
-            <h3>会員編集</h3>
-        @endif
+            <h3>会員詳細</h3>
         </div>
         <ul>
         <li><a href="{{ action('ManagementController@getmember_list') }}">一覧に戻る</a></li>
@@ -92,32 +90,28 @@
     </div>
 
     <div class="container">
-    <form method="post" action="{{ route('manage_member_confirm.post') }}">
+    <form method="post" action="{{ route('manage_member_detail.post') }}">
     @csrf
         <div class="items">
             <span class="item">ID</span>
-            @if( url()->previous() === url("/manage_member_register"))
-                登録後に自動採番
-            @else
-                {{ $id }}
-            @endif
+            {{ $id }}
         </div>
 
         <div class="items">
             <span class="item">氏名</span>
-            {{ $input['name_sei'] }}
-            {{ $input['name_mei'] }}
+            {{ $items['name_sei'] }}
+            {{ $items['name_mei'] }}
         </div>
 
         <div class="items">
             <span class="item">ニックネーム</span>
-            {{ $input['nickname'] }}
+            {{ $items['nickname'] }}
         </div>
 
         <div class="items">
             <span class="item">性別</span>
             @foreach(config('master.gender') as $key => $value)
-            @if($input['gender'] == $key) {{ $value }} @endif
+            @if($items['gender'] == $key) {{ $value }} @endif
             @endforeach
         </div>
 
@@ -128,18 +122,14 @@
 
         <div class="items">
             <span class="item">メールアドレス</span>
-            {{ $input['email'] }}
+            {{ $items['email'] }}
         </div>
         
         <br><br>
-        @if( url()->previous() === url("/manage_member_register"))
-            <input type="submit" class="white-button" value="登録完了">
-        @else
-            <input type="submit" class="white-button" value="編集完了">
-        @endif
+        <a href="/manage_member_edit/{{$id}}" class="white-button">編集</a>
+        <input type="submit" class="white-button" value="削除">
         
-        </form>
     </div>
-
+    </form>
 </body>
 </html>

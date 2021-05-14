@@ -216,6 +216,12 @@ Route::get('/manage_member_confirm', 'ManagementController@getmember_confirm')->
 //会員登録/編集確認ページでPOST
 Route::post('/manage_member_confirm', 'ManagementController@postmember_confirm')->name("manage_member_confirm.post");
 
+//会員詳細ページを表示
+Route::get('/manage_member_detail/{id}', 'ManagementController@getmember_detail')->name("manage_member_detail.show");
+
+//会員詳細ページでPOST
+Route::post('/manage_member_detail', 'ManagementController@postmember_detail')->name("manage_member_detail.post");
+
 /*
 |--------------------------------------------------------------------------
 | ログイン認証
