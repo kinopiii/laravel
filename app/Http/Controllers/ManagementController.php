@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Management;
 use App\Member;
 use App\product;
+use App\product_category;
+use App\product_subcategory;
 use Carbon\Carbon;
 
 class ManagementController extends Controller
@@ -322,23 +324,199 @@ class ManagementController extends Controller
             $id = $request->get('id');
             $free = $request->get('free');
 
-            $query = product::select();
+            $query = product_category::select();
 
 
             if(!empty($id)){
-                $query->where('id',$id);
+                $query->where('product_categorys.id',$id);
             }
             if(!empty($free)){
                 $query->where('product_categorys.name',$free);
                 $query->orwhere('product_subcategorys.name',$free);
             }
 
-            $query->select('products.id as id','products.created_at as created_at','product_categorys.name as category');
-            $query->join('product_categorys', 'products.product_category_id','=','product_categorys.id');
-            $query->join('product_subcategorys', 'products.product_subcategory_id','=','product_subcategorys.id');
+            $query->select('product_categorys.id as id','product_categorys.created_at as created_at','product_categorys.name as category');
+            $query->join('product_subcategorys', 'product_categorys.id','=','product_subcategorys.product_category_id');
             
-            $items = $query->sortable()->orderBy('id', 'desc')->paginate(10);         
+            $items = $query->groupby('product_categorys.name')->orderBy('id', 'desc')->paginate(10);         
         }
         return view('management.product_cate_list',compact('items'));
     }
+
+
+    //商品カテゴリ登録
+    public function getproduct_cate_register(){
+        return view('management.product_cate_register');
+    }
+
+    //商品カテゴリ登録でPOST
+    public function postproduct_cate_register(Request $request){
+        $input = $request->all();
+        $rules = [
+            'category' => 'required|max:20',
+            'subcategory1' => 'nullable|max:20',
+            'subcategory2' => 'nullable|max:20',
+            'subcategory3' => 'nullable|max:20',
+            'subcategory4' => 'nullable|max:20',
+            'subcategory5' => 'nullable|max:20',
+            'subcategory6' => 'nullable|max:20',
+            'subcategory7' => 'nullable|max:20',
+            'subcategory8' => 'nullable|max:20',
+            'subcategory9' => 'nullable|max:20',
+            'subcategory10' => 'nullable|max:20',
+            'subcategory_dummy' => 'required_without_all:subcategory1,subcategory2,subcategory3,subcategory4,subcategory5,subcategory6,subcategory7,subcategory8,subcategory9,subcategory10',
+        ];
+    
+        $messages = [
+            'category.required' => '※カテゴリは必須入力です。',
+            'category.max'  => '※カテゴリは20字以内で入力してください',
+            'subcategory1.max'  => '※サブカテゴリは20字以内で入力してください',
+            'subcategory2.max'  => '※サブカテゴリは20字以内で入力してください',
+            'subcategory3.max'  => '※サブカテゴリは20字以内で入力してください',
+            'subcategory4.max'  => '※サブカテゴリは20字以内で入力してください',
+            'subcategory5.max'  => '※サブカテゴリは20字以内で入力してください',
+            'subcategory6.max'  => '※サブカテゴリは20字以内で入力してください',
+            'subcategory7.max'  => '※サブカテゴリは20字以内で入力してください',
+            'subcategory8.max'  => '※サブカテゴリは20字以内で入力してください',
+            'subcategory9.max'  => '※サブカテゴリは20字以内で入力してください',
+            'subcategory10.max'  => '※サブカテゴリは20字以内で入力してください',
+            'subcategory_dummy.required_without_all'  => '※サブカテゴリは1つ以上入力してください',
+        ];
+    
+        $validator = Validator::make($input, $rules, $messages);
+        if($validator->fails()){
+            return redirect()->action('ManagementController@getproduct_cate_register')
+                ->withErrors($validator)
+                ->withInput();
+        }
+        session(['form_input_regist' => $input ]); 
+        return redirect()->action('ManagementController@getproduct_cate_confirm');
+    }     
+
+    //商品カテゴリ編集
+    public function getproduct_cate_edit($id){
+        $category = product_category::where('id', $id)->value('name');
+        $items = product_subcategory::where('product_category_id', $id)->get();
+
+        session()->put('id', $id);
+
+        return view('management.product_cate_edit',compact('category','items','id'));
+    }    
+
+    //商品カテゴリ編集でPOST
+    public function postproduct_cate_edit(Request $request){
+        $input = $request->all();
+        $rules = [
+            'category' => 'required|max:20',
+            'subcategory1' => 'nullable|max:20',
+            'subcategory2' => 'nullable|max:20',
+            'subcategory3' => 'nullable|max:20',
+            'subcategory4' => 'nullable|max:20',
+            'subcategory5' => 'nullable|max:20',
+            'subcategory6' => 'nullable|max:20',
+            'subcategory7' => 'nullable|max:20',
+            'subcategory8' => 'nullable|max:20',
+            'subcategory9' => 'nullable|max:20',
+            'subcategory10' => 'nullable|max:20',
+            'subcategory_dummy' => 'required_without_all:subcategory1,subcategory2,subcategory3,subcategory4,subcategory5,subcategory6,subcategory7,subcategory8,subcategory9,subcategory10',
+        ];
+    
+        $messages = [
+            'category.required' => '※カテゴリは必須入力です。',
+            'category.max'  => '※カテゴリは20字以内で入力してください',
+            'subcategory1.max'  => '※サブカテゴリは20字以内で入力してください',
+            'subcategory2.max'  => '※サブカテゴリは20字以内で入力してください',
+            'subcategory3.max'  => '※サブカテゴリは20字以内で入力してください',
+            'subcategory4.max'  => '※サブカテゴリは20字以内で入力してください',
+            'subcategory5.max'  => '※サブカテゴリは20字以内で入力してください',
+            'subcategory6.max'  => '※サブカテゴリは20字以内で入力してください',
+            'subcategory7.max'  => '※サブカテゴリは20字以内で入力してください',
+            'subcategory8.max'  => '※サブカテゴリは20字以内で入力してください',
+            'subcategory9.max'  => '※サブカテゴリは20字以内で入力してください',
+            'subcategory10.max'  => '※サブカテゴリは20字以内で入力してください',
+            'subcategory_dummy.required_without_all'  => '※サブカテゴリは1つ以上入力してください',
+        ];
+    
+        $id = session('id');
+        $validator = Validator::make($input, $rules, $messages);
+        if($validator->fails()){
+            return redirect()->action('ManagementController@getproduct_cate_edit',['id'=>$id])
+                ->withErrors($validator)
+                ->withInput();
+        }
+        session(['form_input_edit' => $input ]); 
+        return redirect()->action('ManagementController@getproduct_cate_confirm');
+    }       
+
+    //商品カテゴリ登録・編集確認画面
+    public function getproduct_cate_confirm(Request $request){
+        if( url()->previous() === url("/product_cate_register")){
+            //会員登録の場合
+            $input = session('form_input_regist');
+        }else{
+            //会員編集の場合
+            $input = session('form_input_edit');
+            $id = session('id');
+        }
+        
+        return view('management.product_cate_confirm',compact('input','id'));
+    }  
+
+    
+
+    //商品カテゴリ登録・編集確認画面でPOST
+    public function postproduct_cate_confirm(Request $request){
+
+        if(session()->has('id')){
+            //商品カテゴリ編集の場合
+            $id = session('id'); 
+            $input = session('form_input_edit');    
+            
+            //カテゴリのUPDATE
+            $product_category = product_category::where('id',$id)->first();
+            $product_category->name = $input['category'];
+            $product_category->save();
+
+            //サブカテゴリのUPDATE（削除し、新規追加）
+            $product_subcategory = product_subcategory::where('product_category_id',$id)->forcedelete();
+
+            for($i = 1; $i <= 10; $i++){
+                if(!empty($input['subcategory'.$i])){
+                    $product_subcategory = new product_subcategory;
+                    $product_subcategory->product_category_id = $id;
+                    $product_subcategory->name = $input['subcategory'.$i];
+                    $product_subcategory->save();
+                }
+            }
+            session()->forget('id');
+        }else{
+            //商品カテゴリ登録の場合
+            $input = session('form_input_regist');
+            $product_category = new product_category;
+            $product_category->name = $input['category'];
+            $product_category->save();
+
+            //登録したカテゴリＩＤを取得
+            $category = $input['category'];
+            $id = product_category::where('name', $category)->value('id');  
+
+            //サブカテゴリに登録
+            for($i = 1; $i <= 10; $i++){
+                if(!empty($input['subcategory'.$i])){
+                    $product_subcategory = new product_subcategory;
+                    $product_subcategory->product_category_id = $id;
+                    $product_subcategory->name = $input['subcategory'.$i];
+                    $product_subcategory->save();
+                }
+            }
+
+        }
+        //セッションのデータを削除
+        session()->forget('form_input_edit');
+        session()->forget('form_input_regist');
+        session()->forget('id');
+
+        return redirect()->action('ManagementController@getproduct_cate_list');
+    }
+
 }

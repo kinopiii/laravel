@@ -223,8 +223,33 @@ Route::get('/manage_member_detail/{id}', 'ManagementController@getmember_detail'
 Route::post('/manage_member_detail', 'ManagementController@postmember_detail')->name("manage_member_detail.post");
 
 
+
 //商品カテゴリ一覧ページを表示
 Route::get('/product_cate_list', 'ManagementController@getproduct_cate_list')->name("product_cate_list.show");
+
+//商品カテゴリ登録ページを表示
+Route::get('/product_cate_register', 'ManagementController@getproduct_cate_register')->name("product_cate_register.show");
+
+//商品カテゴリ登録ページでPOST
+Route::post('/product_cate_register', 'ManagementController@postproduct_cate_register')->name("product_cate_register.post");
+
+//商品カテゴリ編集ページを表示
+Route::get('/product_cate_edit/{id}', 'ManagementController@getproduct_cate_edit')->name("product_cate_edit.show");
+
+//商品カテゴリ編集ページでPOST
+Route::post('/product_cate_edit', 'ManagementController@postproduct_cate_edit')->name("product_cate_edit.post");
+
+//商品カテゴリ確認ページを表示
+Route::get('/product_cate_confirm', 'ManagementController@getproduct_cate_confirm')->name("product_cate_confirm.show");
+
+//商品カテゴリ確認ページでPOST
+Route::post('/product_cate_confirm', 'ManagementController@postproduct_cate_confirm')->name("product_cate_confirm.post");
+
+//商品カテゴリ詳細ページを表示
+Route::get('/product_cate_detail/{id}', 'ManagementController@getproduct_cate_detail')->name("product_cate_detail.show");
+
+//商品カテゴリ詳細ページでPOST
+Route::post('/product_cate_detail', 'ManagementController@postproduct_cate_detail')->name("product_cate_detail.post");
 
 /*
 |--------------------------------------------------------------------------
