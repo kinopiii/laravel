@@ -136,6 +136,7 @@
                 @sortablelink('created_at', '▼')
             </th>
             <th width="30" bgcolor="B0C4DE" style="border-style:dashed;">編集</th>
+            <th width="30" bgcolor="B0C4DE" style="border-style:dashed;">詳細</th>
     </form>
             @foreach($items as $item) 
                 <tr>
@@ -143,6 +144,7 @@
                     <td bgcolor="white" style="border-style:dashed;">{{$item->category}}</td>
                     <td bgcolor="white" style="border-style:dashed;">{{$item->created_at->format('Y/m/d')}}</td>
                     <td bgcolor="white" style="border-style:dashed;"><a href="/product_cate_edit/{{$item->id}}">編集</a></td>
+                    <td bgcolor="white" style="border-style:dashed;"><a href="/product_cate_detail/{{$item->id}}">詳細</a></td>
                 </tr>   
             @endforeach
         </table>

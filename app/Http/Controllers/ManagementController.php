@@ -519,4 +519,26 @@ class ManagementController extends Controller
         return redirect()->action('ManagementController@getproduct_cate_list');
     }
 
+    //商品カテゴリ詳細ページ
+    public function getproduct_cate_detail($id){
+        $category = product_category::where('id', $id)->value('name');
+        $items = product_subcategory::where('product_category_id',$id)->get();
+
+        session()->put('id', $id);
+        return view('management.product_cate_detail',compact('items','id','category'));
+    }
+
+    //商品カテゴリ詳細でPOST
+    public function postproduct_cate_detail(){
+        //大カテゴリから削除
+        $id = session('id'); 
+        $query = product_category::where('id', $id)->delete();
+
+
+        //小カテゴリから削除
+        $query = product_subcategory::where('product_category_id', $id)->delete();
+
+        return redirect()->action('ManagementController@getproduct_cate_list');
+    }    
+
 }
