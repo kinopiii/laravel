@@ -100,6 +100,9 @@
         <div class="button">
             <a href="{{ action('ManagementController@getproduct_cate_list') }}" class="white-button2">商品カテゴリ一覧</a>
         </div>
+        <div class="button">
+            <a href="{{ action('ManagementController@getproduct_list') }}" class="white-button">商品一覧</a>
+        </div>
     </div>
 </body>
 </html>

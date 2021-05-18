@@ -251,6 +251,10 @@ Route::get('/product_cate_detail/{id}', 'ManagementController@getproduct_cate_de
 //商品カテゴリ詳細ページでPOST
 Route::post('/product_cate_detail', 'ManagementController@postproduct_cate_detail')->name("product_cate_detail.post");
 
+
+//商品カテゴリ一覧ページを表示
+Route::get('/product_list', 'ManagementController@getproduct_list')->name("product_list.show");
+
 /*
 |--------------------------------------------------------------------------
 | ログイン認証

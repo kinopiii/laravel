@@ -338,7 +338,7 @@ class ManagementController extends Controller
             $query->select('product_categorys.id as id','product_categorys.created_at as created_at','product_categorys.name as category');
             $query->join('product_subcategorys', 'product_categorys.id','=','product_subcategorys.product_category_id');
             
-            $items = $query->groupby('product_categorys.name')->orderBy('id', 'desc')->paginate(10);         
+            $items = $query->groupby('product_categorys.name')->sortable()->orderBy('id', 'desc')->paginate(10);         
         }
         return view('management.product_cate_list',compact('items'));
     }
@@ -541,4 +541,27 @@ class ManagementController extends Controller
         return redirect()->action('ManagementController@getproduct_cate_list');
     }    
 
+
+    //商品一覧ページ
+    public function getproduct_list(Request $request){
+        if($request->has('search')){
+            $id = $request->get('id');
+            $free = $request->get('free');
+
+            $query = product::select();
+
+
+            if(!empty($id)){
+                $query->where('id',$id);
+            }
+            if(!empty($free)){
+                $query->where('name',$free);
+                $query->orwhere('product_content',$free);
+            }
+            
+            $items = $query->sortable()->orderBy('id', 'desc')->paginate(10);         
+        }
+        return view('management.product_list',compact('items'));
+    }
+    
 }
