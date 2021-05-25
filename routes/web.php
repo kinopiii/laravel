@@ -252,8 +252,26 @@ Route::get('/product_cate_detail/{id}', 'ManagementController@getproduct_cate_de
 Route::post('/product_cate_detail', 'ManagementController@postproduct_cate_detail')->name("product_cate_detail.post");
 
 
-//商品カテゴリ一覧ページを表示
+//商品一覧ページを表示
 Route::get('/product_list', 'ManagementController@getproduct_list')->name("product_list.show");
+
+//商品登録ページを表示
+Route::get('/product_register', 'ManagementController@getproduct_register')->name("product_register.show");
+
+//商品登録ページでPOST
+Route::post('/product_register', 'ManagementController@postproduct_register')->name("product_register.post");
+
+//商品編集ページを表示
+Route::get('/product_edit/{id}', 'ManagementController@getproduct_edit')->name("product_edit.show");
+
+//商品編集ページでPOST
+Route::post('/product_edit', 'ManagementController@postproduct_edit')->name("product_edit.post");
+
+//商品確認ページを表示
+Route::get('/product_confirm', 'ManagementController@getproduct_confirm')->name("product_confirm.show");
+
+//商品確認ページでPOST
+Route::post('/product_confirm', 'ManagementController@postproduct_confirm')->name("product_confirm.post");
 
 /*
 |--------------------------------------------------------------------------
