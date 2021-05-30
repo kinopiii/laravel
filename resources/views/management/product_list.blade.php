@@ -155,5 +155,12 @@
 
     </div>
 
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script>
+        sessionStorage.clear()
+        sessionStorage.removeItem('category')
+        sessionStorage.removeItem('subcategory')
+    </script>
+
 </body>
 </html>

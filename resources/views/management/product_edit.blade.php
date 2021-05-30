@@ -119,70 +119,132 @@
             <br><br>
             
             <span class="item">商品カテゴリ</span>
-            {{Form::select('category', $category, $items->category_id, ['id' => 'category'] )}}
             
+            {{Form::select('category', $category, old('category',$items->category_id) , ['id' => 'category'] )}}
+
             <select id="subcategory" name="subcategory">
             @foreach($subcategory as $index=>$value)
-                <?php             
+                <?php     
+
+                header('Content-type: application/json; charset=utf-8'); // ヘッダ（JSON指定など）
+                $jsubcategory = filter_input(INPUT_POST, 'データ');
+                
                 $id = explode(',',$index);
-                $oldsubcategory = $input['subcategory'] ;
-                if($oldsubcategory == $id[0]){
+                if($input['subcategory'] == $id[0]){
                     echo sprintf("<option value=%d data-parent=%d selected>%s</option>", $id[0], $id[1], $value);
-                }if($items->subcategory_id == $id[0]){
+                }elseif($jsubcategory == $id[0]){
+                    echo sprintf("<option value=%d data-parent=%d selected>%s</option>", $id[0], $id[1], $value);
+                }elseif($items->subcategory_id == $id[0]){
                     echo sprintf("<option value=%d data-parent=%d selected>%s</option>", $id[0], $id[1], $value);
                 }else{
                     echo sprintf("<option value=%d data-parent=%d>%s</option>", $id[0], $id[1], $value);
                 }
+                
                 ?>                
             @endforeach   
             </select>
 
             <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
             <script>
-            $(function() {
+
+
+      
+
+$(function() {
+    storage = sessionStorage;
+ 
+ // 親子連動セレクトボックス(親セレクトボックス、子セレクトボックス)
+ function parent_selectbox(ele_name_parent, ele_name_child){
+     var $children = $(ele_name_child); //子の要素を変数に入れます。
+     var original = $children.html(); //子のコピーを取っておく
+     var selected = $(this).data('selected');
+
+     
+     if(storage.getItem('category')){
+        var getcategory = storage.getItem('category');
+        var getsubcategory = storage.getItem('subcategory');
+        $("#category").val(getcategory);
+        $("#subcategory").val(getsubcategory);
+
+        // 子をコピーから、全選択肢を復活させる
+        $children.html(original).find('option').each(function() {    
+        //選択された親のvalueを取得
+        var parent_val = $(this).val();
+        // 親の値(data-parent)を取得
+        var child_val = $(this).data('parent');   
+        // 違う親の値(data-parent)だったら、選択肢を削除する
+        if(parent_val != child_val) {
+            $(this).not(':first-child').remove();
+        }
+        // 結果、選択された親の子しか残されない
+        });
+
+        sessionStorage.clear()
+        sessionStorage.removeItem('category')
+        sessionStorage.removeItem('subcategory')
+
+     }
+     //親のselect要素が変更になるとイベントが発生
+      $(ele_name_parent).change(function() {
+
+        //親のselect要素が未選択の場合、子を初期化 & disabledにして終了！
+        if ($(this).val() == "") {
+        $children.attr('disabled', 'disabled');
+        $children.val("");
+        return;
+        } 
+
+        //選択された親のvalueを取得
+        var parent_val = $(this).val();
+
+        // 子をコピーから、全選択肢を復活させる
+        $children.html(original).find('option').each(function() {
+        // 親の値(data-parent)を取得
+        var child_val = $(this).data('parent'); 
+
+        // 違う親の値(data-parent)だったら、選択肢を削除する
+        if (parent_val != child_val) {
+            $(this).not(':first-child').remove();
+        }
+        // 結果、選択された親の子しか残されない
+        });
+
+        // 子を有効化して選択できるようにする
+        $children.removeAttr('disabled');
+
+        // 編集画面用に、最初に１回だけ選択した状態にする
+        }).trigger('change');
+           
             
-                // 親子連動セレクトボックス(親セレクトボックス、子セレクトボックス)
-                function parent_selectbox(ele_name_parent, ele_name_child){
-                    var $children = $(ele_name_child); //子の要素を変数に入れます。
-                    var original = $children.html(); //子のコピーを取っておく
-                    var selected = $(this).data('selected');
-            
-                    //親のselect要素が変更になるとイベントが発生
-                    $(ele_name_parent).change(function() {
-            
-                    //親のselect要素が未選択の場合、子を初期化 & disabledにして終了！
-                    if ($(this).val() == "") {
-                        $children.attr('disabled', 'disabled');
-                        $children.val("");
-                        return;
-                    }       
-            
-                    //選択された親のvalueを取得
-                    var parent_val = $(this).val();
-            
-                    // 子をコピーから、全選択肢を復活させる
-                    $children.html(original).find('option').each(function() {
-                        // 親の値(data-parent)を取得
-                        var child_val = $(this).data('parent'); 
-            
-                        // 違う親の値(data-parent)だったら、選択肢を削除する
-                        if (parent_val != child_val) {
-                        $(this).not(':first-child').remove();
-                        }
-                        // 結果、選択された親の子しか残されない
-                    });
-            
-                    // 子を有効化して選択できるようにする
-                    $children.removeAttr('disabled');
-                    
-                    // 編集画面用に、最初に１回だけ選択した状態にする
-                    }).trigger('change');
-                    
-                }    
-                // カテゴリー・サブカテゴリー連動セレクトボックス
-                parent_selectbox('#category', '#subcategory');
-            
-            })  
+        }    
+        // カテゴリー・サブカテゴリー連動セレクトボックス
+        parent_selectbox('#category', '#subcategory');
+
+        })
+
+$(function($){
+    //フォーム選択による動作
+    $('#category').on('change', function(){
+        var category = $(this).val(); 
+        storage.setItem('category', category);
+    });  
+
+    $('#subcategory').on('change', function(){
+        var subcategory = $(this).val(); 
+        storage.setItem('subcategory', subcategory);
+    });
+});
+
+
+
+$(function () {    
+    $(window).on('pageshow');
+});
+
+
+
+
+
             </script>
 
             @error('category')
@@ -427,7 +489,7 @@
     </div>
 
     <div class="button">
-       {{Form::submit('確認画面へ', ['class'=>'white-button'])}}
+       {{Form::submit('確認画面へ', ['class'=>'white-button','id'=>'btn'])}}
     </div>
      {{Form::close()}}
 
