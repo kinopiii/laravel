@@ -273,6 +273,12 @@ Route::get('/product_confirm', 'ManagementController@getproduct_confirm')->name(
 //商品確認ページでPOST
 Route::post('/product_confirm', 'ManagementController@postproduct_confirm')->name("product_confirm.post");
 
+//商品詳細ページを表示
+Route::get('/product_detail/{id}', 'ManagementController@getproduct_detail')->name("product_detail.show");
+
+//商品詳細ページでPOST
+Route::post('/product_detail', 'ManagementController@postproduct_detail')->name("product_detail.post");
+
 /*
 |--------------------------------------------------------------------------
 | ログイン認証

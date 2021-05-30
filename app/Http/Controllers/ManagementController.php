@@ -10,9 +10,12 @@ use App\Member;
 use App\product;
 use App\product_category;
 use App\product_subcategory;
+use App\Review;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 
 class ManagementController extends Controller
 {
@@ -865,9 +868,6 @@ class ManagementController extends Controller
 
             $products->save();
 
-
-
-
         //セッションのデータを削除
         session()->forget('form_input_edit');
         session()->forget('form_input_regist');
@@ -879,5 +879,43 @@ class ManagementController extends Controller
 
         return redirect()->action('ManagementController@getproduct_list');
     }
+
+    //商品詳細ページ
+    public function getproduct_detail($id){
+
+        session()->put('id', $id);
+
+        //商品の詳細を取得
+        $query = product::where('products.id', $id);
+        $query->select('products.id as id','products.name as name','products.product_content as content','product_categorys.name as category_name','product_subcategorys.name as subcategory_name','products.image_1 as file1','products.image_2 as file2','products.image_3 as file3','products.image_4 as file4');
+        $query->join('product_categorys', 'product_categorys.id','=','products.product_category_id');
+        $query->join('product_subcategorys', 'product_subcategorys.id','=','products.product_subcategory_id');
+        $items = $query->first();
+
+        //総合評価を取得
+        $avgevaluation = Review::where('product_id', $id)
+        ->avg('evaluation');
+        $totalevaluation = floor($avgevaluation);  
+
+        session(['items' => $items ]); 
+
+        //reviewsテーブルから取得
+        $query = Review::where('product_id', $id);
+        $query->select('members.nickname as nickname','members.id as memberid','reviews.evaluation as evaluation','reviews.comment as comment','reviews.id as reviewid');
+        $query->join('members', 'reviews.member_id','=','members.id');
+        $reviews = $query->paginate(3);        
+
+        return view('management.product_detail',compact('items','id','totalevaluation','reviews'));
+    }
+
+    //商品カテゴリ詳細でPOST
+    public function postproduct_detail(){
+        //商品から削除
+        $id = session('id'); 
+        $query = product::where('id', $id)->delete();
+
+        return redirect()->action('ManagementController@getproduct_list');
+    }  
+    
     
 }

@@ -9,6 +9,7 @@ use Kyslik\ColumnSortable\Sortable;
 class product extends Model
 {
     use Sortable; 
+    use SoftDeletes;
 
     protected $table = 'products';
     protected $fillable = ['id', 'member_id', 'product_category_id', 'product_subcategory_id', 'name', 'product_content'];

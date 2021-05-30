@@ -125,14 +125,11 @@
             <select id="subcategory" name="subcategory">
             @foreach($subcategory as $index=>$value)
                 <?php     
-
-                header('Content-type: application/json; charset=utf-8'); // ヘッダ（JSON指定など）
-                $jsubcategory = filter_input(INPUT_POST, 'データ');
                 
                 $id = explode(',',$index);
                 if($input['subcategory'] == $id[0]){
                     echo sprintf("<option value=%d data-parent=%d selected>%s</option>", $id[0], $id[1], $value);
-                }elseif($jsubcategory == $id[0]){
+                }elseif($subcategory == $id[0]){
                     echo sprintf("<option value=%d data-parent=%d selected>%s</option>", $id[0], $id[1], $value);
                 }elseif($items->subcategory_id == $id[0]){
                     echo sprintf("<option value=%d data-parent=%d selected>%s</option>", $id[0], $id[1], $value);
