@@ -75,6 +75,10 @@
                 margin-right:1000px;
                 margin-top:90px;
             }
+            .button2{
+                margin-right:1000px;
+                margin-top:50px;
+            }
         </style>
     </head>
 
@@ -97,11 +101,14 @@
         <div class="button">
             <a href="{{ action('ManagementController@getmember_list') }}" class="white-button">会員一覧</a>
         </div>
-        <div class="button">
+        <div class="button2">
             <a href="{{ action('ManagementController@getproduct_cate_list') }}" class="white-button2">商品カテゴリ一覧</a>
         </div>
-        <div class="button">
+        <div class="button2">
             <a href="{{ action('ManagementController@getproduct_list') }}" class="white-button">商品一覧</a>
+        </div>
+        <div class="button2">
+            <a href="{{ action('ManagementController@getreview_list') }}" class="white-button2">商品レビュー一覧</a>
         </div>
     </div>
 </body>

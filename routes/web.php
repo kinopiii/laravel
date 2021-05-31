@@ -279,6 +279,10 @@ Route::get('/product_detail/{id}', 'ManagementController@getproduct_detail')->na
 //商品詳細ページでPOST
 Route::post('/product_detail', 'ManagementController@postproduct_detail')->name("product_detail.post");
 
+
+//商品レビュー一覧ページを表示
+Route::get('/review_list', 'ManagementController@getreview_list')->name("review_list.show");
+
 /*
 |--------------------------------------------------------------------------
 | ログイン認証

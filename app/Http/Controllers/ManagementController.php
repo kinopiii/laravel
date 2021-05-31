@@ -916,6 +916,31 @@ class ManagementController extends Controller
 
         return redirect()->action('ManagementController@getproduct_list');
     }  
+
+
+
+    //商品レビュー一覧ページ
+    public function getreview_list(Request $request){
+        if($request->has('search')){
+            $id = $request->get('id');
+            $free = $request->get('free');
+
+            $query = review::select();
+
+
+            if(!empty($id)){
+                $query->where('id',$id);
+            }
+            if(!empty($free)){
+                $query->where('name',$free);
+                $query->orwhere('comment',$free);
+            }
+            
+            $items = $query->sortable()->orderBy('id', 'desc')->paginate(10);         
+        }
+
+        return view('management.review_list',compact('items'));
+    }    
     
     
 }
