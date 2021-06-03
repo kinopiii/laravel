@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use App\Rules\Exists;
 
 class ManagementController extends Controller
 {
@@ -932,15 +933,191 @@ class ManagementController extends Controller
                 $query->where('id',$id);
             }
             if(!empty($free)){
-                $query->where('name',$free);
-                $query->orwhere('comment',$free);
+                $query->where('comment',$free);
             }
             
             $items = $query->sortable()->orderBy('id', 'desc')->paginate(10);         
         }
+        //セッションのデータを削除
+        session()->forget('form_input_edit');
+        session()->forget('form_input_regist');
+        session()->forget('id');
+        session()->forget('product_id');      
 
         return view('management.review_list',compact('items'));
     }    
+
+    //レビュー登録画面
+    public function getreview_register(Request $request){
+        return view('management.review_register');
+    }
+
+    //レビュー登録画面でPOST
+    public function postreview_register(Request $request){ 
+        $input = $request->only(['comment', 'evaluation','product_id']);
+        $rules = [
+            'comment' => 'required|max:500',
+            'evaluation' => 'required|numeric|between:1,5',
+            'product_id' => 'required|exists:products,id',
+        ];
+    
+        $messages = [
+            'comment.required' => '※商品コメントは必須入力です。',
+            'comment.max'  => '※商品コメントは500字以内で入力してください',
+            'evaluation.required' => '※商品評価は必須入力です。',
+            'evaluation.numeric' => '※商品評価はリストから選択してください。',
+            'evaluation.between' => '※商品評価はリストから選択してください。',
+            'product_id.required' => '※商品IDは必須入力です。',
+            'product_id.exists' => '※商品IDは登録済のIDを入力してください。',
+        ];
+
+        $product_id = $request->input('product_id');
+        session(['product_id' => $product_id ]); 
+
+        //バリデーション
+        $validator = Validator::make($input, $rules, $messages);
+        if($validator->fails()){
+            return redirect()->route('reviews_register.show')
+                ->withErrors($validator)
+                ->withInput();
+        }
+        $request->session()->put('form_input_register', $input);
+        
+        return redirect()->route('reviews_confirm.show'); 
+
+    } 
+
+    //レビュー編集画面
+    public function getreview_edit($id){ 
+
+        $query = review::where('reviews.id', $id);
+        $query->select('products.id as product_id','products.name as product_name','products.image_1 as file1','reviews.id as review_id','reviews.evaluation as evaluation','reviews.comment as comment');
+        $query->join('products', 'reviews.product_id','=','products.id');
+        $items = $query->first();
+
+        //商品IDを検索
+        $productid = review::where('id', $id)->value('product_id');
+
+        //総合評価を取得
+        $avgevaluation = Review::where('product_id', $productid)
+        ->avg('evaluation');
+        $totalevaluation = floor($avgevaluation);   
+        
+        session(['id' => $id ]); 
+
+        return view('management.review_register',compact('items','totalevaluation'));
+    }   
+    
+
+
+    //レビュー編集でPOST
+    public function postreview_edit(Request $request,$id){ 
+        $input = $request->only(['comment', 'evaluation']);
+        $rules = [
+            'comment' => 'required|max:500',
+            'evaluation' => 'required|numeric|between:1,5',
+        ];
+    
+        $messages = [
+            'comment.required' => '※商品コメントは必須入力です。',
+            'comment.max'  => '※商品コメントは500字以内で入力してください',
+            'evaluation.required' => '※商品評価は必須入力です。',
+            'evaluation.numeric' => '※商品評価はリストから選択してください。',
+            'evaluation.between' => '※商品評価はリストから選択してください。',
+        ];
+
+        //バリデーション
+        $validator = Validator::make($input, $rules, $messages);
+        if($validator->fails()){
+            return redirect()->route('reviews_edit.show',['id'=>$id])
+                ->withErrors($validator)
+                ->withInput();
+        }
+        $request->session()->put('form_input_edit', $input);
+        
+        return redirect()->route('reviews_confirm.show')->with(compact('input','items','totalevaluation')); 
+
+    } 
+
+    //レビュー確認
+    public function getreview_confirm(Request $request){ 
+        $id = session('id'); 
+        $registerproduct_id = session('product_id'); 
+        
+        //商品登録の場合
+        if(!empty($registerproduct_id)){
+            //総合評価を取得
+            $avgevaluation = Review::where('product_id', $registerproduct_id)
+            ->avg('evaluation');
+            $totalevaluation = floor($avgevaluation); 
+
+            //商品情報を取得
+            $query = product::where('id', $registerproduct_id);
+            $query->select('products.id as product_id','products.name as product_name','products.image_1 as file1');
+            $items = $query->first(); 
+            $input = session('form_input_register'); 
+        }
+
+        //商品編集の場合
+        if(!empty($id)){
+            //商品IDを検索
+            $productid = review::where('id', $id)->value('product_id');
+
+            //総合評価を取得
+            $avgevaluation = Review::where('product_id', $productid)
+            ->avg('evaluation');
+            $totalevaluation = floor($avgevaluation); 
+
+            //商品情報を取得
+            $query = review::where('reviews.id', $id);
+            $query->select('products.id as product_id','products.name as product_name','products.image_1 as file1','reviews.id as review_id','reviews.evaluation as evaluation','reviews.comment as comment');
+            $query->join('products', 'reviews.product_id','=','products.id');
+            $items = $query->first();   
+            $input = session('form_input_edit'); 
+
+        }   
+
+        return view('management.review_confirm',compact('items','input','totalevaluation','id'));
+    }    
+        
+     //商品レビュー登録確認画面でPOST
+     public function postreview_confirm(Request $request){
+        $id = session('id'); 
+        $registerproduct_id = session('product_id'); 
+
+        //登録の場合
+        if(!empty($registerproduct_id)){
+            $input = session('form_input_register');
+
+            $reviews = new Review;  
+            $reviews->product_id = $registerproduct_id;
+            $reviews->comment = $input['comment'];
+            $reviews->evaluation = $input['evaluation'];
+            $reviews->save();
+        }
+
+        //編集の場合
+        if(!empty($id)){
+            $input = session('form_input_edit');
+    
+            $reviews = Review::where('id',$id)->first();  
+            $reviews->product_id = $id;
+            $reviews->comment = $input['comment'];
+            $reviews->evaluation = $input['evaluation'];
+            $reviews->save();
+        }
+
+        //セッションのデータを削除
+        session()->forget('form_input_edit');
+        session()->forget('form_input_regist');
+        session()->forget('id');
+        session()->forget('product_id');  
+
+        
+        return redirect()->action('ManagementController@getreview_list');
+     }
+ 
+ 
     
     
 }

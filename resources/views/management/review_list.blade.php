@@ -64,7 +64,7 @@
                 color:white;
                 font-size:18px;
                 font-weight:bold;
-                padding:10px 60px;
+                padding:10px 30px;
                 border-style: none;
                 border-radius: 5px;
             }
@@ -86,7 +86,7 @@
             }
             .register{
                 margin-top:20px;
-                margin-right:410px;
+                margin-right:400px;
             }
 
         </style>
@@ -104,6 +104,9 @@
     </div>
 
     <div class="container">
+    <div Class="register">
+    <a href="/reviews_register" class="blue-button">商品レビュー登録</a>
+    </div>
         <form method="get" action="{{ route('review_list.show') }}">
         @csrf
             <div class="tabledata">
@@ -143,7 +146,7 @@
                     <td bgcolor="white" style="border-style:dashed;">{{$item->evaluation}}</td>
                     <td bgcolor="white" style="border-style:dashed;">{{$item->comment}}</td>
                     <td bgcolor="white" style="border-style:dashed;">{{$item->created_at->format('Y/m/d')}}</td>
-                    <td bgcolor="white" style="border-style:dashed;"><a href="/manage_member_edit/{{$item->id}}">編集</a></td>
+                    <td bgcolor="white" style="border-style:dashed;"><a href="/reviews_edit/{{$item->id}}">編集</a></td>
                 </tr>   
             @endforeach
         </table>

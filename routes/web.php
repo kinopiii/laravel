@@ -283,6 +283,24 @@ Route::post('/product_detail', 'ManagementController@postproduct_detail')->name(
 //商品レビュー一覧ページを表示
 Route::get('/review_list', 'ManagementController@getreview_list')->name("review_list.show");
 
+//商品レビュー登録ページを表示
+Route::get('/reviews_register', 'ManagementController@getreview_register')->name("reviews_register.show");
+
+//商品レビュー登録ページでPOST
+Route::post('/reviews_register', 'ManagementController@postreview_register')->name("reviews_register.post");
+
+//商品レビュー編集ページを表示
+Route::get('/reviews_edit/{id}', 'ManagementController@getreview_edit')->name("reviews_edit.show");
+
+//商品レビュー編集ページでPOST
+Route::post('/reviews_edit/{id}', 'ManagementController@postreview_edit')->name("reviews_edit.post");
+
+//商品レビュー確認ページを表示
+Route::get('/reviews_confirm', 'ManagementController@getreview_confirm')->name("reviews_confirm.show");
+
+//商品レビュー確認ページでPOST
+Route::post('/reviews_confirm', 'ManagementController@postreview_confirm')->name("reviews_confirm.post");
+
 /*
 |--------------------------------------------------------------------------
 | ログイン認証
