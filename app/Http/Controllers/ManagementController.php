@@ -1117,6 +1117,37 @@ class ManagementController extends Controller
         return redirect()->action('ManagementController@getreview_list');
      }
  
+    //レビュー詳細ページ
+    public function getreviews_detail($id){
+
+        session()->put('id', $id);
+
+
+        $query = review::where('reviews.id', $id);
+        $query->select('products.id as product_id','products.name as product_name','products.image_1 as file1','reviews.id as review_id','reviews.evaluation as evaluation','reviews.comment as comment');
+        $query->join('products', 'reviews.product_id','=','products.id');
+        $items = $query->first();
+
+        //商品IDを検索
+        $productid = review::where('id', $id)->value('product_id');
+
+        //総合評価を取得
+        $avgevaluation = Review::where('product_id', $productid)
+        ->avg('evaluation');
+        $totalevaluation = floor($avgevaluation);   
+      
+
+        return view('management.review_detail',compact('items','id','totalevaluation'));
+    }
+
+    //レビュー詳細でPOST
+    public function postreviews_detail(){
+        //商品から削除
+        $id = session('id'); 
+        $query = review::where('id', $id)->delete();
+
+        return redirect()->action('ManagementController@getreview_list');
+    }  
  
     
     

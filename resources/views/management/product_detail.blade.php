@@ -247,7 +247,7 @@
                     
                     <div>
                     <span class="item">商品コメント</span>{{$review->comment}}
-                    <span class="revi"><a class="goreview" href="/manage_review_detail/{{$review->reviewid}}">商品レビュー詳細</a></span>
+                    <span class="revi"><a class="goreview" href="/reviews_detail/{{$review->reviewid}}">商品レビュー詳細</a></span>
                     </div>
                     </td>
                 </tr>   

@@ -301,6 +301,12 @@ Route::get('/reviews_confirm', 'ManagementController@getreview_confirm')->name("
 //商品レビュー確認ページでPOST
 Route::post('/reviews_confirm', 'ManagementController@postreview_confirm')->name("reviews_confirm.post");
 
+//商品レビューページを表示
+Route::get('/reviews_detail/{id}', 'ManagementController@getreviews_detail')->name("reviews_detail.show");
+
+//商品レビューページでPOST
+Route::post('/reviews_detail', 'ManagementController@postreviews_detail')->name("reviews_detail.post");
+
 /*
 |--------------------------------------------------------------------------
 | ログイン認証
